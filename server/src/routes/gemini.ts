@@ -1,16 +1,10 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
+import { Router } from "express";
+import { ENV } from "../config";
 
-dotenv.config();
+const router = Router();
 
-const app = express();
-
-app.use(express.json());
-app.use(cors());
-
-app.post("/gemini-api", async (req, res) => {
-	const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+router.post("/gemini-api", async (req, res) => {
+	const GEMINI_API_KEY = ENV.GEMINI_API_KEY;
 	const { prompt } = req.body;
 	if (!prompt) {
 		return res.status(400).json({ error: "No prompt provided" });
@@ -54,8 +48,4 @@ app.post("/gemini-api", async (req, res) => {
 	}
 });
 
-const PORT = process.env.PORT;
-
-app.listen(PORT, () => {
-	console.log(`Server running on http://localhost:${PORT}`);
-});
+export default router;
