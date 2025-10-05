@@ -1,1 +1,1 @@
-console.log("human");
+console.log("content script inserted");
