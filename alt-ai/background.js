@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
  */
 const handleGeminiAPI = async (prompt, sendResponse) => {
 	try {
-		const res = await fetch("http://localhost:7248/gemini-api", {
+		const res = await fetch("http://localhost:7248/api/gemini-api", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ prompt }),
