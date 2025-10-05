@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>AltAI</title>
+		<link rel="stylesheet" href="styles.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		/>
+	</head>
+	<body>
+		<header class="heading">
+			<h1 class="title">AltAI</h1>
+			<i
+				class="fa-solid fa-circle-info info-icon"
+				title="Scans images on this page for missing alt text"
+			></i>
+		</header>
+		<main id="wrapper">
+			<div class="btn-container">
+				<button
+					id="scan-btn"
+					title="Highlight images missing alt text and add text fields to fill them manually."
+				>
+					Scan Page
+				</button>
+				<button
+					id="add-alt-btn"
+					title="Automatically generate descriptive alt text for images using AI."
+				>
+					Add Alt Text with AI
+				</button>
+			</div>
+
+			<div id="result-area" class="result-area">
+				<p class="placeholder">No scan yet. Click "Scan Page" to check images.</p>
+			</div>
+		</main>
+		<script src="popup.js"></script>
+	</body>
+</html>

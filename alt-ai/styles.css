@@ -1,0 +1,185 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: "Inter", sans-serif;
+	width: 600px;
+	height: 700px;
+	padding: 20px;
+	background-color: white;
+	color: #333;
+	border-radius: 16px;
+}
+
+.heading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.title {
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
+.info-icon {
+	color: #666;
+	cursor: pointer;
+	font-size: 1.1rem;
+	transition: color 0.2s;
+}
+.info-icon:hover {
+	color: #007bff;
+}
+
+#wrapper {
+	margin-top: 4rem;
+}
+
+.btn-container {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 32px;
+	gap: 12px;
+}
+
+#scan-btn {
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 24px;
+	padding: 10px 20px;
+	cursor: pointer;
+	font-size: 0.95rem;
+	font-weight: 500;
+	transition: background-color 0.2s;
+}
+#scan-btn:hover {
+	background-color: #0056b3;
+}
+
+#add-alt-btn {
+	border: 1px solid #007bff;
+	color: #007bff;
+	border-radius: 24px;
+	padding: 10px 20px;
+	cursor: pointer;
+	font-size: 0.95rem;
+	font-weight: 500;
+	transition: background-color 0.2s;
+	background-color: white;
+}
+#add-alt-btn:hover {
+	background-color: #007bff;
+	color: white;
+}
+
+#apply-btn {
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 24px;
+	padding: 10px 20px;
+	cursor: pointer;
+	font-size: 0.95rem;
+	font-weight: 500;
+	transition: background-color 0.2s;
+}
+
+#apply-btn:hover {
+	background-color: #0056b3;
+}
+
+.result-area {
+	text-align: center;
+	color: #555;
+	font-size: 0.9rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding-bottom: 32px;
+
+	p {
+		max-width: 250px;
+	}
+}
+
+.placeholder {
+	color: #888;
+	max-width: 250px;
+}
+
+.result-area.with-images {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+
+	.images-container {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 16px;
+	}
+}
+
+.missing-alt {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+
+	.image {
+		width: 100%;
+		height: 150px;
+		object-fit: cover;
+		border-radius: 8px;
+	}
+
+	.alt-input {
+		width: 100%;
+		padding: 6px;
+		border: 1px solid #e6e6e6;
+		border-radius: 8px;
+	}
+}
+
+.status-message {
+	font-size: 16px;
+	width: 100%;
+}
+.status-message.success {
+	color: green;
+}
+.status-message.error {
+	color: red;
+}
+.status-message.warning {
+	color: orange;
+}
+
+button:focus-visible {
+	outline: 3px solid #2563eb;
+	outline-offset: 3px;
+}
+
+.alt-input {
+	width: 100%;
+	border: 1px solid #e6e6e6;
+	border-radius: 2px;
+}
+
+.hide {
+	display: none;
+}
+
+.show {
+	display: block;
+}
+
+button:disabled {
+	opacity: 50;
+	cursor: not-allowed;
+}
