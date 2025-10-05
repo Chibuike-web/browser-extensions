@@ -1,5 +1,7 @@
 /// <reference types="chrome"/>
 
+console.log("✅ Content script injected successfully");
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 	console.log("Received in content script:", message);
 

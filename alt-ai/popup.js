@@ -2,14 +2,17 @@
 
 const wrapper = document.getElementById("wrapper");
 const btnContainer = document.querySelector(".btn-container");
-const scanBtn = document.getElementById("scan-btn");
-const addAltBtn = document.getElementById("add-alt-btn");
+const scanBtn = /** @type {HTMLButtonElement} */ document.getElementById("scan-btn");
+const addAltBtn = /** @type {HTMLButtonElement} */ (document.getElementById("add-alt-btn"));
 const resultArea = document.getElementById("result-area");
 let noAltImagesSrc = [];
 
 scanBtn?.addEventListener("click", (e) => {
 	e.preventDefault();
-	applyAltBtn();
+
+	const oldApplyBtn = document.getElementById("apply-btn");
+	if (oldApplyBtn) oldApplyBtn.remove();
+
 	scanBtn.textContent = "Rescan";
 
 	chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -17,35 +20,38 @@ scanBtn?.addEventListener("click", (e) => {
 		if (typeof tabId === "number") {
 			chrome.tabs.sendMessage(tabId, { action: "scan images" }, (res) => {
 				noAltImagesSrc = res.images || [];
-				if (resultArea) {
-					if (noAltImagesSrc.length === 0) {
-						resultArea.innerHTML = `<p class="status-message success">All images have alt text 🎉</p>`;
-						return;
-					}
+				if (!resultArea) return;
 
-					resultArea.classList.add("with-images");
-					const images = noAltImagesSrc
+				if (noAltImagesSrc.length === 0) {
+					resultArea.innerHTML = `<p class="status-message success">All images have alt text 🎉</p>`;
+					addAltBtn.disabled = true;
+					addAltBtn.classList.add("disabled");
+					return;
+				}
 
-						.map(
-							/**
-							 * @param {string} img
-							 * @param {number} index
-							 * @returns {string}
-							 */ (img, index) => {
-								return /*html*/ `
+				resultArea.classList.add("with-images");
+				const images = noAltImagesSrc
+
+					.map(
+						/**
+						 * @param {string} img
+						 * @param {number} index
+						 * @returns {string}
+						 */ (img, index) => {
+							return /*html*/ `
                 <div class="missing-alt">
                   <img class="image" src="${img}" />
 									<input type="text" data-src="${img}" id="input-${index}" class="alt-input"/>
                 </div>
               `;
-							}
-						)
-						.join("");
-					resultArea.innerHTML = /*html*/ `
+						}
+					)
+					.join("");
+				resultArea.innerHTML = /*html*/ `
 						<p class="status-message warning">Found ${noAltImagesSrc.length} images without alt text</p>
 						<div class="images-container">${images}</div>
 					`;
-				}
+				applyAltBtn();
 			});
 		}
 	});
@@ -58,12 +64,19 @@ function applyAltBtn() {
 	applyBtn.addEventListener("click", (e) => {
 		e.preventDefault();
 		console.log("Apply button clicked");
+		applyBtn.remove();
+
 		const altData = manualAlt();
 
 		chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 			const tabId = tabs[0]?.id;
 			if (typeof tabId === "number") {
-				chrome.tabs.sendMessage(tabId, { action: "manualAlt", data: altData }, (res) => {});
+				chrome.tabs.sendMessage(tabId, { action: "manualAlt", data: altData }, (res) => {
+					console.log(res.info);
+					resultArea.innerHTML = `<p class="status-message success">All images have alt text 🎉</p>`;
+					addAltBtn.disabled = true;
+					addAltBtn.classList.add("disabled");
+				});
 			}
 		});
 	});
