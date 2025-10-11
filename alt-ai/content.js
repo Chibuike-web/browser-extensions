@@ -1,10 +1,6 @@
 /// <reference types="chrome"/>
 
-console.log("✅ Content script injected successfully");
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-	console.log("Received in content script:", message);
-
 	if (message.action === "scan images") {
 		sendResponse({ images: scanImages() });
 	} else if (message.action === "add alt") {
@@ -13,12 +9,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 		chrome.runtime.sendMessage({ imageSrcs: noAltImagesSrc }, (res) => {
 			if (res.error) {
 				console.log(res.error, res.details);
+				return;
 			} else {
 				attachAltTexts(res.data);
 			}
+			return true;
 		});
-		sendResponse({ info: "alt text added" });
-		return true;
 	} else if (message.action === "manualAlt") {
 		attachAltTexts(message.data);
 		sendResponse({ info: "alt text added" });

@@ -5,8 +5,6 @@ chrome.action.onClicked.addListener(() => {
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-	console.log("Extension installed");
-
 	if (message.imageSrcs) {
 		const srcs = message.imageSrcs;
 		const srcsInText = srcs.join("\n");
@@ -33,6 +31,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
  * @param {SendResponse} sendResponse
  */
 const handleGeminiAPI = async (prompt, sendResponse) => {
+	chrome.runtime.sendMessage({ status: "fetching" });
+
 	try {
 		const res = await fetch("http://localhost:7248/api/gemini-api", {
 			method: "POST",
@@ -48,7 +48,8 @@ const handleGeminiAPI = async (prompt, sendResponse) => {
 		}
 		/** @type {GeminiAPIResponse} */
 		const data = await res.json();
-		console.log("Gemini response:", data.altText);
+
+		chrome.runtime.sendMessage({ status: "done" });
 
 		sendResponse({ success: true, data: data.altText });
 	} catch (err) {

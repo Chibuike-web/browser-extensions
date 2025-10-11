@@ -98,11 +98,33 @@ addAltBtn.addEventListener("click", (e) => {
 	chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 		const tabId = tabs[0]?.id;
 		if (typeof tabId === "number") {
-			chrome.tabs.sendMessage(tabId, { action: "add alt" }, (res) => {
-				if (res.info === "alt text added") {
-					resultArea.innerHTML = `<p class="status-message success">All images have alt text 🎉</p>`;
-				}
-			});
+			chrome.tabs.sendMessage(tabId, { action: "add alt" });
 		}
 	});
+});
+
+chrome.runtime.onMessage.addListener((message) => {
+	if (message.status === "fetching") {
+		console.log("Fetching alt text...");
+
+		addAltBtn.disabled = true;
+		addAltBtn.classList.add("disabled");
+
+		if (!document.getElementById("loading-spinner")) {
+			const spinner = document.createElement("span");
+			spinner.id = "loading-spinner";
+			spinner.className = "spinner";
+			spinner.style.marginLeft = "8px";
+			addAltBtn.appendChild(spinner);
+		}
+	} else if (message.status === "done") {
+		console.log("Alt text fetch complete");
+
+		const spinner = document.getElementById("loading-spinner");
+		if (spinner) spinner.remove();
+
+		resultArea.innerHTML = `<p class="status-message success">All images have alt text 🎉</p>`;
+		const applyBtn = document.getElementById("apply-btn");
+		if (applyBtn) applyBtn.remove();
+	}
 });

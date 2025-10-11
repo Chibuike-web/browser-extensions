@@ -10,7 +10,12 @@
  */
 
 /**
+ * @typedef {Object} GeminiAPIStatus
+ * @property {{  status: string }} altText
+ */
+
+/**
  * @callback SendResponse
- * @param {GeminiAPIResponse | GeminiAPIError | { success: true, data: GeminiAPIResponse['altText'] }} response
+ * @param {GeminiAPIResponse | GeminiAPIError | { success: true, data: GeminiAPIResponse['altText'] } | GeminiAPIStatus} response
  * @returns {void}
  */
