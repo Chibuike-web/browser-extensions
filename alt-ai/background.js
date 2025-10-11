@@ -34,7 +34,7 @@ const handleGeminiAPI = async (prompt, sendResponse) => {
 	chrome.runtime.sendMessage({ status: "fetching" });
 
 	try {
-		const res = await fetch("http://localhost:7248/api/gemini-api", {
+		const res = await fetch("https://browser-extensions-production.up.railway.app/api/gemini-api", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ prompt }),
