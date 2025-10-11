@@ -15,9 +15,9 @@
 	},
 	"content_scripts": [
 		{
-			"resources": [".css"],
-			"matches": ["<all_urls>"],
-			"js": ["content.js"]
+			"js": ["content.js"],
+			"resources": ["summary.html"],
+			"matches": ["<all_urls>"]
 		}
 	]
 }
