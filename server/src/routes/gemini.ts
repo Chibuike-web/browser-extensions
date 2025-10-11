@@ -1,10 +1,9 @@
 import { Router } from "express";
-import { ENV } from "../config";
 
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const router = Router();
 
 router.post("/gemini-api", async (req, res) => {
-	const GEMINI_API_KEY = ENV.GEMINI_API_KEY;
 	const { prompt } = req.body;
 	if (!prompt) {
 		return res.status(400).json({ error: "No prompt provided" });

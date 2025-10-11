@@ -2,19 +2,17 @@
 	"name": "server",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
-	"type": "module",
+	"type": "commonjs",
 	"scripts": {
-		"dev": "tsx --watch src/server.ts",
+		"dev": "tsx --watch --env-file .env src/server.ts",
 		"build": "tsc",
-		"start": "node dist/server.js"
+		"start": "node --env-file .env dist/server.js"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
 		"cors": "^2.8.5",
-		"dotenv": "^16.5.0",
 		"express": "^5.1.0"
 	},
 	"devDependencies": {
