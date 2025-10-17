@@ -1,12 +1,14 @@
 import { createRoot } from "react-dom/client";
 import "./popup.css";
-import { useState, type MouseEvent } from "react";
+import { useState } from "react";
 
 export default function Popup() {
 	const [summaryType, setSummaryType] = useState("");
-	const handleSummarize = (e: MouseEvent<HTMLButtonElement>) => {
-		e.preventDefault();
-		chrome.runtime.sendMessage({ action: "open_summary_page" });
+	const [isLoading, setIsLoading] = useState(false);
+
+	const handleSummarize = () => {
+		if (!summaryType) return;
+		setIsLoading(true);
 		chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
 			const tabId = tabs[0]?.id;
 			if (typeof tabId !== "number") return;
@@ -27,10 +29,19 @@ export default function Popup() {
 				<option>Technical Focus</option>
 			</select>
 			<button
-				className="w-full bg-blue-600 text-white rounded-md py-2 hover:bg-blue-700"
+				type="button"
+				className="w-full flex items-center justify-center bg-blue-600 text-white rounded-md py-2 hover:bg-blue-700 disabled:opacity-50"
+				disabled={isLoading}
 				onClick={handleSummarize}
 			>
-				Generate Summary
+				{isLoading ? (
+					<span className="flex items-center gap-2">
+						<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+						Generating...
+					</span>
+				) : (
+					"Generating Summary"
+				)}
 			</button>
 		</div>
 	);
