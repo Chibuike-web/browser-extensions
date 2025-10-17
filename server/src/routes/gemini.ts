@@ -14,16 +14,8 @@ router.post("/gemini-api", async (req, res) => {
 			`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
 			{
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					contents: [
-						{
-							parts: [{ text: prompt }],
-						},
-					],
-				}),
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
 			}
 		);
 
@@ -42,8 +34,8 @@ router.post("/gemini-api", async (req, res) => {
 		}
 		console.log("Gemini response:", altText);
 		res.status(200).json({ altText });
-	} catch (err) {
-		console.error("Error calling Gemini API:", err);
+	} catch (error) {
+		console.error("Error calling Gemini API:", error);
 	}
 });
 
