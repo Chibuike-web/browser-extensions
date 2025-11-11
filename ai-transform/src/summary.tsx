@@ -31,10 +31,55 @@ function SummaryPage() {
 					"summaryData",
 					"summaryError",
 				]);
-				if (summaryError) setError(summaryError);
-				else if (summaryData) setData(summaryData);
-			} catch (err) {
-				console.error("Storage get error:", err);
+				if (summaryError) {
+					setError(summaryError);
+					return;
+				} else if (summaryData) {
+					const title =
+						summaryData.title
+							?.trim()
+							.replace(/[^\w\s-]/g, "")
+							.replace(/\s+/g, "-") || "untitled";
+
+					localStorage.setItem(`summaryData-${title}`, JSON.stringify(summaryData));
+					const params = new URLSearchParams(window.location.search);
+					params.set("title", title);
+					window.history.replaceState({}, "", `${window.location.pathname}?${params.toString()}`);
+
+					const cached = localStorage.getItem(`summaryData-${title}`);
+					if (cached) {
+						setData(JSON.parse(cached));
+						return;
+					}
+				} else {
+					const storage = Object.entries(localStorage).filter(([key]) =>
+						key.startsWith("summaryData-")
+					);
+
+					if (storage.length === 0) {
+						setError("No summary data found.");
+						return;
+					}
+					const searchParams = new URLSearchParams(window.location.search);
+					const title = searchParams.get("title");
+
+					if (!title) {
+						setError("No title parameter found.");
+						return;
+					}
+
+					const key = `summaryData-${title}`;
+					const cached = localStorage.getItem(key);
+
+					if (!cached) {
+						setError("No summary data found.");
+						return;
+					}
+
+					setData(JSON.parse(cached));
+				}
+			} catch (error) {
+				console.error("Storage get error:", error);
 				setError("Failed to load summary.");
 			} finally {
 				setIsLoading(false);
@@ -49,18 +94,18 @@ function SummaryPage() {
 
 	return (
 		<main className="min-h-screen py-10 bg-gray-50">
-			<div className="bg-gray-50 text-gray-800 px-4 max-w-[600px] mx-auto">
+			<div className="bg-gray-50 text-gray-800 px-6 max-w-[600px] mx-auto">
 				{data ? (
 					<div className="flex flex-col gap-6">
 						{/* Header */}
-						<header className="flex flex-col gap-1 border-b border-gray-200 pb-4">
+						<header className="flex flex-col gap-3 border-b border-gray-200 pb-4">
 							<h1 className="text-2xl font-semibold">{data.title}</h1>
 							<div className="flex gap-4">
 								{data.url && (
 									<a
 										href={data.url}
 										target="_blank"
-										className="text-sm px-4 py-2 rounded-full bg-blue-100 text-blue-500 hover:bg-blue-500 hover:text-white"
+										className="text-sm px-3 py-1.5 rounded-full bg-blue-100 text-blue-500 hover:bg-blue-500 hover:text-white"
 									>
 										{data.url}
 									</a>
@@ -82,7 +127,7 @@ function SummaryPage() {
 						{/* Highlight */}
 						<section className="flex flex-col gap-2">
 							<h2 className="text-lg font-semibold text-gray-700">Highlights</h2>
-							<ul className="flex flex-col gap-4 text-gray-600">
+							<ul className="flex flex-col gap-4 text-gray-600 w-full">
 								{data.bullets.map((item, i) => (
 									<li
 										className="mx-[-16px] flex items-center gap-4 px-3.5 py-4 bg-gray-100 rounded-[6px] hover:bg-gray-200"
@@ -100,7 +145,7 @@ function SummaryPage() {
 						{/* Key Points */}
 						<section className="flex flex-col gap-2">
 							<h2 className="text-lg font-semibold text-gray-700">Key Points</h2>
-							<ul className="flex flex-col gap-4 text-gray-600">
+							<ul className="flex flex-col gap-4 text-gray-600 w-full">
 								{data.keyPoints.map((item, i) => (
 									<li
 										className="mx-[-16px] flex items-center gap-4 px-3.5 py-4 bg-gray-100 rounded-[6px] hover:bg-gray-200"
@@ -145,7 +190,7 @@ function SummaryPage() {
 						{data.technicalNotes && data.technicalNotes.length > 0 && (
 							<section className="flex flex-col gap-2">
 								<h2 className="text-lg font-semibold text-gray-700">Technical Notes</h2>
-								<ul className="flex flex-col gap-4 text-gray-600">
+								<ul className="flex flex-col gap-4 text-gray-600 w-full">
 									{data.technicalNotes.map((item, i) => (
 										<li
 											className="mx-[-16px] flex items-center gap-4 px-3.5 py-4 bg-gray-100 rounded-[6px] hover:bg-gray-200"
