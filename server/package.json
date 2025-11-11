@@ -13,6 +13,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"ai": "^5.0.92",
 		"cors": "^2.8.5",
 		"express": "^5.1.0",
 		"zod": "^4.1.12"
